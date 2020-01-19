@@ -1,11 +1,11 @@
-package org.server.crud
+package org.server.crud.spring
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class CrudApplication
+class CrudSpringApplication
 
 fun main(args: Array<String>) {
-    runApplication<CrudApplication>(*args)
+    runApplication<CrudSpringApplication>(*args)
 }
