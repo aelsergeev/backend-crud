@@ -1,6 +1,9 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
+val ktorVersion = "1.3.0"
+val mongoVersion = "3.12.1"
+
 plugins {
     id("org.springframework.boot") version "2.3.0.BUILD-SNAPSHOT"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
@@ -33,7 +36,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     /* Kotlin Server */
-    implementation("io.ktor:ktor-server-netty:1.3.0")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-gson:$ktorVersion")
+    implementation("io.ktor:ktor-client-json:$ktorVersion")
 
     /* Spring Server */
     implementation("org.springframework.boot:spring-boot-starter-web") {
@@ -52,6 +57,7 @@ dependencies {
 
     /* Driver */
     runtimeOnly("org.postgresql:postgresql")
+    implementation("org.mongodb:mongodb-driver:$mongoVersion")
 
     /* Lombok */
     compileOnly("org.projectlombok:lombok")
@@ -66,9 +72,7 @@ dependencies {
 }
 
 tasks.bootJar {
-    enabled = true
-    mainClassName = "org.server.crud.ktor.CrudKtorApplicationKt"
-    archiveFileName.set("jar-${archiveFileName.get()}")
+    enabled = false
 }
 
 tasks.build {
