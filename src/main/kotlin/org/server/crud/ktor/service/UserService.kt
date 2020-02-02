@@ -1,17 +1,23 @@
 package org.server.crud.ktor.service
 
+import com.mongodb.client.result.DeleteResult
 import org.bson.types.ObjectId
 import org.server.crud.ktor.dao.UserDao
 import org.server.crud.ktor.models.User
+import org.server.crud.ktor.models.UserCreateRequest
+import org.server.crud.ktor.models.UserDeleteRequest
+import org.server.crud.ktor.models.UserUpdateRequest
 
 class UserService {
     private val userDao = UserDao()
 
-    fun getUserById(id: ObjectId): User {
-        return userDao.getUserById(id)
-    }
+    fun getUserById(id: ObjectId): User = userDao.getUserById(id)
 
-    fun getUsers(): List<User> {
-        return userDao.getUserList()
-    }
+    fun getUsers(): List<User> = userDao.getUserList()
+
+    fun createUser(user: UserCreateRequest): User = userDao.createUser(User(user))
+
+    fun updateUser(user: UserUpdateRequest): User = userDao.updateUser(User(user))
+
+    fun deleteUser(user: UserDeleteRequest): DeleteResult = userDao.deleteUser(User(user))
 }

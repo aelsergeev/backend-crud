@@ -7,6 +7,7 @@ import io.ktor.features.Compression
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
+import io.ktor.routing.route
 import io.ktor.routing.routing
 import io.ktor.server.engine.commandLineEnvironment
 import io.ktor.server.engine.embeddedServer
@@ -26,8 +27,10 @@ fun Application.module() {
     }
 
     routing {
-        hello()
-        user()
+        route("/api") {
+            user()
+            hello()
+        }
     }
 }
 

@@ -1,0 +1,29 @@
+###
+GET http://localhost:8080/api/user/list
+Accept: application/json
+
+###
+GET http://localhost:8080/api/user/5e3574be77a8167a646a9eb7
+Accept: application/json
+
+###
+PUT http://localhost:8080/api/user
+Content-Type: application/json
+
+{ "name": "Daineris", "surname": "Targarian" }
+
+###
+POST http://localhost:8080/api/user
+Content-Type: application/json
+
+{ "id": "5e36d3bf5d60366431a57161", "name": "Tirion", "surname": "Lanister" }
+
+
+###
+DELETE http://localhost:8080/api/user
+Content-Type: application/json
+
+{ "id": "5e36d3bf5d60366431a57161" }
+
+###
+
