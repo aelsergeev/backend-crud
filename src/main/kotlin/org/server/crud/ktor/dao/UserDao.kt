@@ -9,7 +9,7 @@ import org.server.crud.ktor.configs.mongoClient
 import org.server.crud.ktor.models.User
 
 class UserDao {
-    private val mongoDatabase = mongoClient().getDatabase("crud")
+    private val mongoDatabase = mongoClient().getDatabase("admin")
     private val mongoCollection = mongoDatabase.getCollection("user", User::class.java)
 
     fun getUserById(id: ObjectId): User {
@@ -28,8 +28,8 @@ class UserDao {
     fun updateUser(user: User): User {
         val filter = eq("_id", user.id)
         val update = combine(set("name", user.name), set("surname", user.surname))
-        mongoCollection.updateOne(filter, update)
-        return user
+        val result = mongoCollection.updateOne(filter, update)
+        return if (result.modifiedCount == 1L) user else throw IllegalArgumentException("User not found ${user.id}")
     }
 
     fun deleteUser(user: User): DeleteResult {
