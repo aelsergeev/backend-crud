@@ -46,18 +46,18 @@ dependencies {
     }
     implementation("org.springframework.boot:spring-boot-starter-jetty")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 //    implementation("org.springframework.boot:spring-boot-starter-amqp")
 //    implementation("org.springframework.boot:spring-boot-starter-artemis")
 //    implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 //    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 //    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 //    implementation("org.springframework.boot:spring-boot-starter-data-redis")
 //    implementation("org.springframework.kafka:spring-kafka")
 
     /* Driver */
     runtimeOnly("org.postgresql:postgresql")
-    implementation("org.mongodb:mongodb-driver:$mongoVersion")
+    implementation("org.mongodb:mongo-java-driver:$mongoVersion")
 
     /* Lombok */
     compileOnly("org.projectlombok:lombok")

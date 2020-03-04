@@ -1,12 +1,8 @@
 <configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-        </encoder>
-    </appender>
-
-    <root level="DEBUG">
-        <appender-ref ref="STDOUT"/>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+    <include resource="org/springframework/boot/logging/logback/console-appender.xml"/>
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
     </root>
 
     <logger name="org.mongodb" level="INFO"/>
