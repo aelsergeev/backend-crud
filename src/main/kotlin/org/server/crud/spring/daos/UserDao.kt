@@ -1,4 +1,4 @@
-package org.server.crud.spring.dao
+package org.server.crud.spring.daos
 
 import com.mongodb.client.result.DeleteResult
 import org.bson.types.ObjectId
@@ -7,14 +7,16 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.data.mongodb.core.query.Update
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Repository
+import org.springframework.web.server.ResponseStatusException
 
 @Repository
 class UserDao(private val mongoTemplate: MongoTemplate) {
 
     fun getUserById(id: ObjectId): User {
         val query = Query().apply { addCriteria(Criteria.where("_id").`is`(id)) }
-        return mongoTemplate.find(query, User::class.java).first() ?: throw IllegalArgumentException("User not found $id")
+        return mongoTemplate.find(query, User::class.java).first() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found $id")
     }
 
     fun getUserList(): List<User> {
@@ -29,7 +31,7 @@ class UserDao(private val mongoTemplate: MongoTemplate) {
         val query = Query().apply { addCriteria(Criteria.where("_id").`is`(user.id)) }
         val update = Update().apply { set("name", user.name); set("surname", user.surname) }
         val result = mongoTemplate.updateFirst(query, update, User::class.java)
-        return if (result.modifiedCount == 1L) user else throw IllegalArgumentException("User not found ${user.id}")
+        return if (result.modifiedCount == 1L) user else throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found ${user.id}")
     }
 
     fun deleteUser(user: User): DeleteResult {

@@ -6,7 +6,7 @@ import org.server.crud.spring.models.User
 import org.server.crud.spring.models.UserCreateRequest
 import org.server.crud.spring.models.UserDeleteRequest
 import org.server.crud.spring.models.UserUpdateRequest
-import org.server.crud.spring.service.UserService
+import org.server.crud.spring.services.UserService
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable

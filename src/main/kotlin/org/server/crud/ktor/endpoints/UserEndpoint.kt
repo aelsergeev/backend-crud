@@ -6,7 +6,7 @@ import io.ktor.request.receive
 import io.ktor.response.respond
 import io.ktor.routing.*
 import org.bson.types.ObjectId
-import org.server.crud.ktor.service.UserService
+import org.server.crud.ktor.services.UserService
 
 fun Route.user() {
     val userService = UserService()

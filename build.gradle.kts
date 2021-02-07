@@ -1,16 +1,17 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import org.springframework.boot.gradle.tasks.bundling.BootJar
 
-val ktorVersion = "1.3.0"
+val ktorVersion = "1.5.1"
 val mongoVersion = "3.12.1"
+val redissonVersion = "3.13.3"
 
 plugins {
-    id("org.springframework.boot") version "2.3.0.BUILD-SNAPSHOT"
+    id("org.springframework.boot") version "2.4.2"
     id("io.spring.dependency-management") version "1.0.8.RELEASE"
     id("com.github.johnrengelman.shadow") version "5.0.0"
-    kotlin("jvm") version "1.3.61"
-    kotlin("plugin.spring") version "1.3.61"
-    kotlin("plugin.jpa") version "1.3.61"
+    kotlin("jvm") version "1.4.30"
+    kotlin("plugin.spring") version "1.4.30"
+    kotlin("plugin.jpa") version "1.4.30"
 }
 
 group = "org.server"
@@ -40,24 +41,25 @@ dependencies {
     implementation("io.ktor:ktor-gson:$ktorVersion")
     implementation("io.ktor:ktor-client-json:$ktorVersion")
 
-    /* Spring Server */
+    /* Spring Starters */
     implementation("org.springframework.boot:spring-boot-starter-web") {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-tomcat")
     }
     implementation("org.springframework.boot:spring-boot-starter-jetty")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
-//    implementation("org.springframework.boot:spring-boot-starter-amqp")
+    implementation("org.springframework.boot:spring-boot-starter-amqp")
 //    implementation("org.springframework.boot:spring-boot-starter-artemis")
 //    implementation("org.springframework.boot:spring-boot-starter-data-elasticsearch")
 //    implementation("org.springframework.boot:spring-boot-starter-data-jdbc")
 //    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-//    implementation("org.springframework.boot:spring-boot-starter-data-redis")
-//    implementation("org.springframework.kafka:spring-kafka")
+    implementation("org.springframework.kafka:spring-kafka")
+    implementation("org.redisson:redisson-spring-boot-starter:$redissonVersion")
 
     /* Driver */
     runtimeOnly("org.postgresql:postgresql")
-    implementation("org.mongodb:mongo-java-driver:$mongoVersion")
+    runtimeOnly("redis.clients:jedis:3.3.0")
+//    runtimeOnly("org.mongodb:mongo-java-driver:$mongoVersion")
 
     /* Lombok */
     compileOnly("org.projectlombok:lombok")
@@ -85,15 +87,14 @@ tasks.withType<Test> {
 
 tasks.withType<KotlinCompile> {
     kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "1.8"
+        jvmTarget = "11"
     }
 }
 
 tasks.create<BootJar>("bootKtorJar") {
+    mainClass.set("org.server.crud.ktor.CrudKtorApplicationKt")
     group = "build"
     description = "Assembles an executable jar archive containing the main ktor classes and their dependencies."
-    mainClassName = "org.server.crud.ktor.CrudKtorApplicationKt"
     archiveFileName.set("ktor-${archiveFileName.get()}")
 
     dependsOn("compileKotlin", "classes")
@@ -105,9 +106,9 @@ tasks.create<BootJar>("bootKtorJar") {
 }
 
 tasks.create<BootJar>("bootSpringJar") {
+    mainClass.set("org.server.crud.spring.CrudSpringApplicationKt")
     group = "build"
     description = "Assembles an executable jar archive containing the main spring classes and their dependencies."
-    mainClassName = "org.server.crud.spring.CrudSpringApplicationKt"
     archiveFileName.set("spring-${archiveFileName.get()}")
 
     dependsOn("compileKotlin", "classes")

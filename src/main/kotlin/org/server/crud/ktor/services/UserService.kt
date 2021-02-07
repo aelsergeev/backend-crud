@@ -1,8 +1,8 @@
-package org.server.crud.ktor.service
+package org.server.crud.ktor.services
 
 import com.mongodb.client.result.DeleteResult
 import org.bson.types.ObjectId
-import org.server.crud.ktor.dao.UserDao
+import org.server.crud.ktor.daos.UserDao
 import org.server.crud.ktor.models.User
 import org.server.crud.ktor.models.UserCreateRequest
 import org.server.crud.ktor.models.UserDeleteRequest

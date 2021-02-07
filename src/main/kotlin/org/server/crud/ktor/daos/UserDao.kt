@@ -1,4 +1,4 @@
-package org.server.crud.ktor.dao
+package org.server.crud.ktor.daos
 
 import com.mongodb.client.model.Filters.eq
 import com.mongodb.client.model.Updates.combine
@@ -7,13 +7,15 @@ import com.mongodb.client.result.DeleteResult
 import org.bson.types.ObjectId
 import org.server.crud.ktor.configs.mongoClient
 import org.server.crud.ktor.models.User
+import org.springframework.http.HttpStatus
+import org.springframework.web.server.ResponseStatusException
 
 class UserDao {
     private val mongoDatabase = mongoClient().getDatabase("admin")
     private val mongoCollection = mongoDatabase.getCollection("user", User::class.java)
 
     fun getUserById(id: ObjectId): User {
-        return mongoCollection.find(eq("_id", id)).first() ?: throw IllegalArgumentException("User not found $id")
+        return mongoCollection.find(eq("_id", id)).first() ?: throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found $id")
     }
 
     fun getUserList(): List<User> {
@@ -29,7 +31,7 @@ class UserDao {
         val filter = eq("_id", user.id)
         val update = combine(set("name", user.name), set("surname", user.surname))
         val result = mongoCollection.updateOne(filter, update)
-        return if (result.modifiedCount == 1L) user else throw IllegalArgumentException("User not found ${user.id}")
+        return if (result.modifiedCount == 1L) user else throw ResponseStatusException(HttpStatus.NOT_FOUND, "User not found ${user.id}")
     }
 
     fun deleteUser(user: User): DeleteResult {
