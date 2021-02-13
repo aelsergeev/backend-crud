@@ -5,6 +5,11 @@ services:
     ports:
       - 8081:8081
       - 8082:8082
+    environment:
+      MONGODB_HOST: mongo
+      REDIS_HOST: redis
+      KAFKA_HOST: kafka
+      RABBIT_HOST: rabbit
     depends_on:
       - redis
       - kafka
@@ -21,7 +26,7 @@ services:
       - 5432:5432
     restart: always
     environment:
-      POSTGRES_PASSWORD: example
+      POSTGRES_PASSWORD: 213123
     networks:
       - backend-crud
     labels:
