@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo
+  labels:
+    org.backend.crud: mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      org.backend.crud: mongo
+  template:
+    metadata:
+      labels:
+        org.backend.crud: mongo
+    spec:
+      containers:
+      - env:
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: example
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: root
+        image: mongo:latest
+        name: mongo
+        ports:
+        - containerPort: 27017
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  ports:
+    - name: mongo
+      port: 27017
+      targetPort: 27017
+  selector:
+    org.backend.crud: mongo
+  type: ClusterIP

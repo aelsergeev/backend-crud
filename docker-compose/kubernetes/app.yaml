@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  labels:
+    org.backend.crud: app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      org.backend.crud: app
+  template:
+    metadata:
+      labels:
+        org.backend.crud: app
+    spec:
+      containers:
+      - env:
+        - name: KAFKA_HOST
+          value: kafka
+        - name: MONGODB_HOST
+          value: mongo
+        - name: RABBIT_HOST
+          value: rabbit
+        - name: REDIS_HOST
+          value: redis
+        - name: REDIS_PORT
+          value: '6379'
+        - name: RABBIT_PORT
+          value: '5672'
+        - name: KAFKA_PORT
+          value: '9092'
+        image: app
+        imagePullPolicy: Never
+        name: app
+        ports:
+        - containerPort: 8081
+        - containerPort: 8082
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app
+spec:
+  ports:
+    - name: "ktor"
+      port: 8081
+      targetPort: 8081
+    - name: "spring"
+      port: 8082
+      targetPort: 8082
+  selector:
+    org.backend.crud: app
+  type: LoadBalancer

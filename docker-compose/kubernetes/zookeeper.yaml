@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: zookeeper
+  labels:
+    org.backend.crud: zookeeper
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      org.backend.crud: zookeeper
+  template:
+    metadata:
+      labels:
+        org.backend.crud: zookeeper
+    spec:
+      containers:
+      - env:
+        - name: ALLOW_ANONYMOUS_LOGIN
+          value: "yes"
+        image: bitnami/zookeeper:latest
+        name: zookeeper
+        ports:
+        - containerPort: 2181
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper
+spec:
+  ports:
+    - name: zookeeper
+      port: 2181
+      targetPort: 2181
+  selector:
+    org.backend.crud: zookeeper
+  type: ClusterIP

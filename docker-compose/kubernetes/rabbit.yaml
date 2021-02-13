@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rabbit
+  labels:
+    org.backend.crud: rabbit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      org.backend.crud: rabbit
+  template:
+    metadata:
+      labels:
+        org.backend.crud: rabbit
+    spec:
+      containers:
+      - image: rabbitmq:management
+        name: rabbit
+        ports:
+        - containerPort: 5672
+        - containerPort: 15672
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit
+spec:
+  ports:
+    - name: rabbit
+      port: 5672
+      targetPort: 5672
+    - name: rabbit-management
+      port: 15672
+      targetPort: 5672
+  selector:
+    org.backend.crud: rabbit
+  type: ClusterIP
