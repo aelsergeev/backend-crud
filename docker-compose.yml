@@ -1,10 +1,19 @@
-version: '3.3'
+version: '3.6'
 services:
-#  app:
-#    build: .
-#    ports:
-#      - 8081:8081
-#      - 8082:8082
+  app:
+    build: .
+    ports:
+      - 8081:8081
+      - 8082:8082
+    depends_on:
+      - redis
+      - kafka
+      - rabbit
+      - mongo
+    networks:
+      - backend-crud
+    labels:
+      kompose.service.type: loadbalancer
 
   psql:
     image: postgres:latest
@@ -13,16 +22,26 @@ services:
     restart: always
     environment:
       POSTGRES_PASSWORD: example
+    networks:
+      - backend-crud
+    labels:
+      kompose.service.type: clusterip
 
   redis:
     image: redis:latest
     ports:
       - 6379:6379
+    networks:
+      - backend-crud
+    labels:
+      kompose.service.type: clusterip
 
   elasticsearch:
     image: elasticsearch:7.10.1
     environment:
       - discovery.type=single-node
+    networks:
+      - backend-crud
 
   zookeeper:
     image: bitnami/zookeeper:latest
@@ -30,6 +49,10 @@ services:
       - 2181:2181
     environment:
       - ALLOW_ANONYMOUS_LOGIN=yes
+    networks:
+      - backend-crud
+    labels:
+      kompose.service.type: clusterip
 
   kafka:
     image: bitnami/kafka:latest
@@ -40,6 +63,10 @@ services:
       - ALLOW_PLAINTEXT_LISTENER=yes
     depends_on:
       - zookeeper
+    networks:
+      - backend-crud
+    labels:
+      kompose.service.type: clusterip
 
   kafdrop:
     image: obsidiandynamics/kafdrop
@@ -50,9 +77,10 @@ services:
       - JVM_OPTS=-Xms32M -Xmx64M
     depends_on:
       - kafka
-
-  artemis:
-    image: vromero/activemq-artemis:latest
+    networks:
+      - backend-crud
+    labels:
+      kompose.service.type: loadbalancer
 
   mongo:
     image: mongo:latest
@@ -61,10 +89,22 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - backend-crud
+    labels:
+      kompose.service.type: clusterip
 
   rabbit:
     image: rabbitmq:management
     ports:
       - 5672:5672
       - 15672:15672
+    networks:
+      - backend-crud
+    labels:
+      kompose.service.type: clusterip
 
+networks:
+  backend-crud:
+    name: backend-crud
+    driver: bridge

@@ -8,9 +8,7 @@ import io.ktor.routing.*
 import org.bson.types.ObjectId
 import org.server.crud.ktor.services.UserService
 
-fun Route.user() {
-    val userService = UserService()
-
+fun Route.user(userService: UserService) {
     route("/user") {
         get("/{id}") {
             val id = call.parameters["id"]
@@ -23,15 +21,15 @@ fun Route.user() {
             call.respond(userService.getUsers())
         }
 
-        put("/") {
+        put {
             call.respond(userService.createUser(call.receive()))
         }
 
-        post("/") {
+        post {
             call.respond(userService.updateUser(call.receive()))
         }
 
-        delete("/") {
+        delete {
             call.respond(userService.deleteUser(call.receive()))
         }
     }

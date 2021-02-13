@@ -8,7 +8,7 @@ import io.ktor.routing.get
 
 fun Route.hello() {
 
-    get {
+    get("/hello") {
         call.respondText("Hello, world!", ContentType.Text.Html)
     }
 

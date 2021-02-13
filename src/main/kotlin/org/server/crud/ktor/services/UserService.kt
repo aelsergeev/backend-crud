@@ -8,9 +8,9 @@ import org.server.crud.ktor.models.UserCreateRequest
 import org.server.crud.ktor.models.UserDeleteRequest
 import org.server.crud.ktor.models.UserUpdateRequest
 
-class UserService {
-    private val userDao = UserDao()
-
+class UserService(
+    private val userDao: UserDao
+) {
     fun getUserById(id: ObjectId): User = userDao.getUserById(id)
 
     fun getUsers(): List<User> = userDao.getUserList()

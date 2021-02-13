@@ -1,17 +1,16 @@
 package org.server.crud.ktor.daos
 
+import com.mongodb.client.MongoDatabase
 import com.mongodb.client.model.Filters.eq
 import com.mongodb.client.model.Updates.combine
 import com.mongodb.client.model.Updates.set
 import com.mongodb.client.result.DeleteResult
 import org.bson.types.ObjectId
-import org.server.crud.ktor.configs.mongoClient
 import org.server.crud.ktor.models.User
 import org.springframework.http.HttpStatus
 import org.springframework.web.server.ResponseStatusException
 
-class UserDao {
-    private val mongoDatabase = mongoClient().getDatabase("admin")
+class UserDao(mongoDatabase: MongoDatabase) {
     private val mongoCollection = mongoDatabase.getCollection("user", User::class.java)
 
     fun getUserById(id: ObjectId): User {
