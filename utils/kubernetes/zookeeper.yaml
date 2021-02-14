@@ -1,10 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: zookeeper
   labels:
     org.backend.crud: zookeeper
 spec:
+  serviceName: zookeeper
   replicas: 1
   selector:
     matchLabels:
@@ -29,10 +30,9 @@ kind: Service
 metadata:
   name: zookeeper
 spec:
+  clusterIP: None
   ports:
-    - name: zookeeper
+    - name: client
       port: 2181
-      targetPort: 2181
   selector:
     org.backend.crud: zookeeper
-  type: ClusterIP

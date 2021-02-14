@@ -7,10 +7,10 @@ GET http://localhost:8080/api/user/5e3574be77a8167a646a9eb7
 Accept: application/json
 
 ### create user
-PUT http://localhost:8080/api/user
+PUT http://192.168.49.2:31899/api/user
 Content-Type: application/json
 
-{ "name": "zzz2222123123asd2", "surname": "Targarian" }
+{ "name": "LanDa122311", "surname": "Targarian" }
 
 ### update user
 POST http://localhost:8080/api/user

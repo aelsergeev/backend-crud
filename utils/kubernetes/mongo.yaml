@@ -1,10 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: mongo
   labels:
     org.backend.crud: mongo
 spec:
+  serviceName: mongo
   replicas: 1
   selector:
     matchLabels:
@@ -31,10 +32,9 @@ kind: Service
 metadata:
   name: mongo
 spec:
+  clusterIP: None
   ports:
     - name: mongo
       port: 27017
-      targetPort: 27017
   selector:
     org.backend.crud: mongo
-  type: ClusterIP

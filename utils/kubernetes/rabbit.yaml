@@ -1,10 +1,11 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: rabbit
   labels:
     org.backend.crud: rabbit
 spec:
+  serviceName: rabbit
   replicas: 1
   selector:
     matchLabels:
@@ -27,13 +28,11 @@ kind: Service
 metadata:
   name: rabbit
 spec:
+  clusterIP: None
   ports:
     - name: rabbit
       port: 5672
-      targetPort: 5672
     - name: rabbit-management
       port: 15672
-      targetPort: 5672
   selector:
     org.backend.crud: rabbit
-  type: ClusterIP

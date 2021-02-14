@@ -18,18 +18,20 @@ spec:
       - env:
         - name: KAFKA_HOST
           value: kafka
+        - name: KAFKA_PORT
+          value: '9092'
         - name: MONGODB_HOST
           value: mongo
+        - name: MONGODB_PORT
+          value: '27017'
         - name: RABBIT_HOST
           value: rabbit
+        - name: RABBIT_PORT
+          value: '5672'
         - name: REDIS_HOST
           value: redis
         - name: REDIS_PORT
           value: '6379'
-        - name: RABBIT_PORT
-          value: '5672'
-        - name: KAFKA_PORT
-          value: '9092'
         image: app
         imagePullPolicy: Never
         name: app
@@ -46,10 +48,8 @@ spec:
   ports:
     - name: "ktor"
       port: 8081
-      targetPort: 8081
     - name: "spring"
       port: 8082
-      targetPort: 8082
   selector:
     org.backend.crud: app
   type: LoadBalancer
