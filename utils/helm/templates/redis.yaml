@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: redis
+  labels:
+    org.backend.crud: redis
+spec:
+  serviceName: redis
+  replicas: 1
+  selector:
+    matchLabels:
+      org.backend.crud: redis
+  template:
+    metadata:
+      labels:
+        org.backend.crud: redis
+    spec:
+      containers:
+      - image: redis:latest
+        name: redis
+        ports:
+        - containerPort: {{ .Values.redis.port }}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis
+spec:
+  clusterIP: None
+  ports:
+    - name: redis
+      port: {{ .Values.redis.port }}
+  selector:
+    org.backend.crud: redis

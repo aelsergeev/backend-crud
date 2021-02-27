@@ -1,0 +1,29 @@
+app:
+  spring:
+    port: 8082
+  ktor:
+    port: 8081
+
+kafka:
+  host: kafka
+  port: 9092
+
+zookeeper:
+  host: zookeeper
+  port: 2181
+
+mongo:
+  host: mongo
+  port: 27017
+  username: root
+  password: example
+
+rabbit:
+  host: rabbit
+  port:
+    server: 5672
+    management: 15672
+
+redis:
+  host: redis
+  port: 6379

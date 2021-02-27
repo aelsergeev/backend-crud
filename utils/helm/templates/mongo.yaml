@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+  labels:
+    org.backend.crud: mongo
+spec:
+  serviceName: mongo
+  replicas: 1
+  selector:
+    matchLabels:
+      org.backend.crud: mongo
+  template:
+    metadata:
+      labels:
+        org.backend.crud: mongo
+    spec:
+      containers:
+      - env:
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: {{ .Values.mongo.password }}
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: {{ .Values.mongo.username }}
+        image: mongo:latest
+        name: mongo
+        ports:
+        - containerPort: {{ .Values.mongo.port }}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  clusterIP: None
+  ports:
+    - name: mongo
+      port: {{ .Values.mongo.port }}
+  selector:
+    org.backend.crud: mongo

@@ -17,27 +17,27 @@ spec:
       containers:
       - env:
         - name: KAFKA_HOST
-          value: kafka
+          value: {{ .Values.kafka.host }}
         - name: KAFKA_PORT
-          value: '9092'
+          value: "{{ .Values.kafka.port }}"
         - name: MONGODB_HOST
-          value: mongo
+          value: {{ .Values.mongo.host }}
         - name: MONGODB_PORT
-          value: '27017'
+          value: "{{ .Values.mongo.port }}"
         - name: RABBIT_HOST
-          value: rabbit
+          value: {{ .Values.rabbit.host }}
         - name: RABBIT_PORT
-          value: '5672'
+          value: "{{ .Values.rabbit.port.server }}"
         - name: REDIS_HOST
-          value: redis
+          value: {{ .Values.redis.host }}
         - name: REDIS_PORT
-          value: '6379'
+          value: "{{ .Values.redis.port }}"
         image: app
         imagePullPolicy: Never
         name: app
         ports:
-        - containerPort: 8081
-        - containerPort: 8082
+        - containerPort: {{ .Values.app.ktor.port }}
+        - containerPort: {{ .Values.app.spring.port }}
       restartPolicy: Always
 ---
 apiVersion: v1
@@ -46,10 +46,10 @@ metadata:
   name: app
 spec:
   ports:
-    - name: "ktor"
-      port: 8081
-    - name: "spring"
-      port: 8082
+    - name: ktor
+      port: {{ .Values.app.ktor.port }}
+    - name: spring
+      port: {{ .Values.app.spring.port }}
   selector:
     org.backend.crud: app
   type: LoadBalancer

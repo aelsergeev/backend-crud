@@ -1,0 +1,4 @@
+apiVersion: v2
+name: backend-crud
+version: 0.0.1
+description: Example of different backend things

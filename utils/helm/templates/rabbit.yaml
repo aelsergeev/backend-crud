@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: rabbit
+  labels:
+    org.backend.crud: rabbit
+spec:
+  serviceName: rabbit
+  replicas: 1
+  selector:
+    matchLabels:
+      org.backend.crud: rabbit
+  template:
+    metadata:
+      labels:
+        org.backend.crud: rabbit
+    spec:
+      containers:
+      - image: rabbitmq:management
+        name: rabbit
+        ports:
+        - containerPort: {{ .Values.rabbit.port.server }}
+        - containerPort: {{ .Values.rabbit.port.management }}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rabbit
+spec:
+  clusterIP: None
+  ports:
+    - name: rabbit
+      port: {{ .Values.rabbit.port.server }}
+    - name: rabbit-management
+      port: {{ .Values.rabbit.port.management }}
+  selector:
+    org.backend.crud: rabbit

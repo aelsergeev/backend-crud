@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: zookeeper
+  labels:
+    org.backend.crud: zookeeper
+spec:
+  serviceName: zookeeper
+  replicas: 1
+  selector:
+    matchLabels:
+      org.backend.crud: zookeeper
+  template:
+    metadata:
+      labels:
+        org.backend.crud: zookeeper
+    spec:
+      containers:
+      - env:
+        - name: ALLOW_ANONYMOUS_LOGIN
+          value: "yes"
+        image: bitnami/zookeeper:latest
+        name: zookeeper
+        ports:
+        - containerPort: {{ .Values.zookeeper.port }}
+      restartPolicy: Always
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: zookeeper
+spec:
+  clusterIP: None
+  ports:
+    - name: zookeeper
+      port: {{ .Values.zookeeper.port }}
+  selector:
+    org.backend.crud: zookeeper
